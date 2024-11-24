@@ -12,9 +12,9 @@ def RenameKtoV(path):
     nd = dirname(path) if isfile(path) else path
     chdir(nd)
     if isfile(f:=GetJson(path)):
-        atrib = load(open(f, "r"))
-        for k in atrib:
-            v = atrib[k]
+        namecfg = load(open(f, "r"))
+        for k in namecfg:
+            v = namecfg[k]
             if splitext(k)[1] == "":
                 k += splitext(v)[1]
             elif splitext(v)[1] == "":
@@ -26,9 +26,9 @@ def RenameVtoK(path):
     nd = dirname(path) if isfile(path) else path
     chdir(nd)
     if isfile(f:=GetJson(path)):
-        atrib = load(open(f, "r"))
-        for k in atrib:
-            v = atrib[k]
+        namecfg = load(open(f, "r"))
+        for k in namecfg:
+            v = namecfg[k]
             if splitext(k)[1] == "":
                 k += splitext(v)[1]
             elif splitext(v)[1] == "":
