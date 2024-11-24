@@ -17,7 +17,7 @@ for p in bad_procs:
     if (query := input("kill? y/n/a: ")) == "y":
         p.kill()
     elif query == "a":
-        for p in bedrock:
+        for p in bad_procs:
             pprint(p.name())
             p.kill()
         break
