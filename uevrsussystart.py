@@ -58,7 +58,10 @@ else:
 
 if "late" in _args:
 	late = 1
-	_args = _args.split()
+	# split to list if its a string otherwise assume it was a list
+	try:
+		_args = _args.split()
+	except Exception as e: pass
 	_args.remove("late")
 
 
