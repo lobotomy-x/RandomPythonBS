@@ -89,8 +89,8 @@ if len(dlls) == 0:
 	cleanup_procs("UEVRInjector")
 	if late == 0:
 		copyfile(oxr, game_oxr)
-		pyinjector.inject(game.pid, game_oxr)
-	subprocess.Popen(executable = uevr_front, args = f'--attach-exe="{gamePath}"')
+		pyinjector.inject(game.pid, oxr)
+	subprocess.Popen(executable = uevr_front, args = f'--attach-exe="{gameName}"')
 	psutil.Process(game.pid).resume()
 	if late == 1:
 		copyfile(oxr, game_oxr)
