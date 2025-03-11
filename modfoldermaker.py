@@ -4,7 +4,7 @@ from sys import argv
 from shutil import copyfile
 modcontent = []
 if len(argv) > 1:
-    modcontent = argv[1]
+    modcontent = argv[1:]
 else:
     modcontent = [f.name for f in scandir(getcwd()) if (not f.name.endswith(".py") and isfile(f))]
 exports, modpath = abspath(getcwd()).split("Exports")
