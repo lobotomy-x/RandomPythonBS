@@ -9,24 +9,24 @@ from tempfile import gettempdir
 # trash cleanup script to manage some of blender's absurd bloat from autosaves
 safe_mode = True
 date_regex = r'(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}_)'
-deletion_folder = join(gettempdir(), 'blend_cleanup')
-if not isdir(deletion_folder):
-    makedirs(deletion_folder)
+removal_folder = join(gettempdir(), 'blend_cleanup')
+if not isdir(removal_folder):
+    makedirs(removal_folder)
 
 def unneeded_autosave(path):
     if path.endswith(("Unnamed.blend1","autosave.blend")) and (getctime(path) < datetime.now().timestamp() - 86400):
         return True
     return False
 
-def safe_copy(path):
+def safe_copy(src, dest = removal_folder):
     # rename is the preferred way to move files in python but it can't handle cross drive moves
     # so shutil is usually recommended, except it falls apart with anything non-ascii
     # most python users including package writers stop here
     # we could invoke system to use robocopy but that would be kind of bitch made
     # the answer is honestly really obvious and if this stumped you I think you need to learn a lower level language
     # legit just read the bytes and immediately write them at the intended destination or store it with mmap if you want to do anything to it
-    data = open(entry.path, "r+b").read()
-    with open(join(deletion_folder, entry.name), "wb") as f:
+    data = open(src, "r+b").read()
+    with open(join(dest, basename(src)), "wb") as f:
         f.write(data)
         f.seek(0)
         f.close()
@@ -50,14 +50,14 @@ for _dir in search_paths:
     with open(join(dirname(__file__), "cleanup_log.txt"), "w") as logfile:
         for entry in scandir(_dir):
             try:
-                if isdir(entry.path) or dirname(entry.path) == deletion_folder:
+                if isdir(entry.path) or dirname(entry.path) == removal_folder:
                     continue
                 if not isfile(entry.path):
                     continue
                 if unneeded_autosave(entry.path):
                     if safe_mode:
                         safe_copy(entry.path)
-                        logfile.write(f"Moved {entry.name} to {deletion_folder}\n")
+                        logfile.write(f"Moved {entry.name} to {removal_folder}\n")
                     remove(entry.path)
                     logfile.write(f"Removed {entry.name}\n")
                 elif entry.name.endswith((".blend1")):
@@ -65,7 +65,7 @@ for _dir in search_paths:
                         if isfile(og:=entry.name.rsplit("1")[0]) or unneeded_autosave(entry.path):
                             if safe_mode:
                                 safe_copy(entry.path)
-                                logfile.write(f"Moved {entry.name} to {deletion_folder}\n")
+                                logfile.write(f"Moved {entry.name} to {removal_folder}\n")
                             remove(entry.path)
                             logfile.write(f"Removed {entry.name}\n")
                 elif entry.name.endswith(".blend"):
@@ -83,7 +83,7 @@ for _dir in search_paths:
                     if latest_similar != entry.path and getctime(entry.path) < datetime.now().timestamp() - 86400:
                         if safe_mode:
                             safe_copy(entry.path)
-                            logfile.write(f"Moved {entry.name} to {deletion_folder}\n")
+                            logfile.write(f"Moved {entry.name} to {removal_folder}\n")
                         remove(entry.path)
                         logfile.write(f"Removed {entry.name}\n")
             except:
@@ -93,7 +93,7 @@ print("Done scanning.")
 size = 0
 if safe_mode:
     print("Found and collected the following files:\n")
-    files = [f.path for f in scandir(deletion_folder) if isfile(f.path)]
+    files = [f.path for f in scandir(removal_folder) if isfile(f.path)]
     for f in files:
         print(f)
     print("Ensure that nothing has been collected by mistake.\n")
