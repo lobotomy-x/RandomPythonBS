@@ -4,6 +4,9 @@ CLIs that need startup args are cringe so almost everything here should work jus
 
 Many of these are reusable with some tweaking. I've been making use of the new windows powertoys feature "new++" which gives you a second new file menu when right clicking in windows explorer that can be populated with your own scripts that can be copied wherever and used without altering the original. Very handy here
 
+# unicopy.py 
+Solves a few issues that shouldnt be issues but somehow are present in every python package outside builtins. No idea of speed but you're using python so you already didn't care. 
+
 # blendercleanup.py
 Helps reclaim space from blender's horrible autosaves that are ultimately necessary to avoid data loss. Not recursive, doesnt search globally unless you launch from CLI or shortcut with desired search paths as args. Run it in any folder with lots of blender files and it will move the files to your temp dir and then prompt you to delete them which is needed to actually get the space back. You can use rem, remove, del, or delete as a startup arg to directly delete files and skip this step. In either case please check carefully and understand you are responsible for any cases of data loss. I've erred on the side of caution here and ignore recent files even if they meet other conditions for removal. I don't check for anything not using .blend or .blend1 extensions so if you want to keep an older backup around and guarantee safety you could name to blend2 
 
