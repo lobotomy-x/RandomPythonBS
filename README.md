@@ -4,6 +4,9 @@ CLIs that need startup args are cringe so almost everything here should work jus
 
 Many of these are reusable with some tweaking. I've been making use of the new windows powertoys feature "new++" which gives you a second new file menu when right clicking in windows explorer that can be populated with your own scripts that can be copied wherever and used without altering the original. Very handy here
 
+# aes.py
+automatically fetches a certain page from a certain website, parses for a list of AES keys for games using a certain engine and prints for easy pasting into fmodel
+
 # unicopy.py 
 Solves a few issues that shouldnt be issues but somehow are present in every python package outside builtins. No idea of speed but you're using python so you already didn't care. 
 
