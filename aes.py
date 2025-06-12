@@ -1,4 +1,9 @@
-from playwright.sync_api import sync_playwright
+from os import system 
+try:
+    from playwright.sync_api import sync_playwright
+except Exception as e:
+    system("pip install playwright")
+    from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from lxml import etree
 from json import dump, load
@@ -6,15 +11,14 @@ from json import dump, load
 
 def fetch_forum_content(url):
     with sync_playwright() as p:
-        browser = p.chromium.launch()  # Or p.firefox.launch() or p.webkit.launch()
+        browser = p.chromium.launch()
         page = browser.new_page()
 
         try:
             print(f"Navigating to {url}...")
-            page.goto(url, wait_until="networkidle")  # Wait until network is idle
+            page.goto(url, wait_until="networkidle")
 
             print("Page loaded. Attempting to get content...")
-            # You can now access the fully rendered HTML
             content = page.content()
 
             print("Content fetched successfully.")
@@ -28,27 +32,14 @@ def fetch_forum_content(url):
             browser.close()
 
 
-# The URL of the forum topic you want to fetch
 forum_url = "https://cs.rin.ru/forum/viewtopic.php?t=100672"
 
 html_content = fetch_forum_content(forum_url)
 
 if html_content:
     print("--- Fetched HTML Content (partial) ---")
-    # Print a portion of the content to verify
     print(html_content[:1000])
     print("--- End of partial content ---")
-
-    # Now you can use a library like BeautifulSoup to parse the 'html_content'
-    # and extract the specific information you need from the rendered page.
-    # Example (install beautifulsoup4: pip install beautifulsoup4):
-    # from bs4 import BeautifulSoup
-    # soup = BeautifulSoup(html_content, 'html.parser')
-    # Find the elements containing the forum posts (you'll need to inspect the page's structure)
-    # post_elements = soup.select('.postbody') # Replace '.postbody' with the actual selector
-    # for post in post_elements:
-    #     print(post.get_text())
-
 else:
     print("Failed to fetch content.")
 
